@@ -12,7 +12,7 @@ def getLinks(s):
     
 def download(username,repo,commit,folder,dest):
     f='https://github.com/%s/%s/archive/%s.zip'%(username,repo,commit)
-    #print(f)
+    # ~ print(f)
     response  = urllib.request.urlopen(f)
     data = response .read()
     z = zipfile.ZipFile(io.BytesIO(data))
@@ -43,9 +43,10 @@ s=open(input("input file: "),"rb").read()
 links=getLinks(s)
 print(links)
 for link in links:
-    username,repo,_,commit,folder=urllib.parse.unquote(link.decode('utf-8')).split("/")[3:]
-    print(username,repo,commit,folder)
-    download(username,repo,commit,folder,"")
+	# ~ if('Assignment' in link.decode('utf-8')):
+	username,repo,_,commit,folder=urllib.parse.unquote(link.decode('utf-8')).split("/")[3:]
+	print(username,repo,commit,folder)
+	download(username,repo,commit,folder,"")
 
 folders=glob.glob("grade\*")
 cwd = os.getcwd()
@@ -55,11 +56,11 @@ for f in folders:
     os.chdir(f)
     try:
         pass
-        call("javac *.java")
-        call("java Program.java")
-        #call("python program.py 1 4 4")
+        # ~ call("javac *.java")
+        # ~ call("java Program.java")
+        call("python Program.py")
         input("===========end of run=============")
-        showFile("Program.java")
+        showFile("Program.py")
     except:
         pass
         print("whoops")

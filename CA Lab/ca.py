@@ -120,10 +120,18 @@ def getSat(car):
 	dl = np.roll(l, -1, axis=1)
 	dr = np.roll(r, -1, axis=1)
 	
+	
 	sat = (car==l).astype(int) + (car==r).astype(int) + (car==u).astype(int) + (car==d).astype(int) \
 	+(car==ul).astype(int) + (car==ur).astype(int) + (car==dl).astype(int) + (car==dr).astype(int)
 	
-	sat = sat/8
+	neigh = (car!=0).astype(int) + (car!=0).astype(int) + (car!=0).astype(int) + (car!=0).astype(int) \
+	+(car!=0).astype(int) + (car!=0).astype(int) + (car!=0).astype(int) + (car!=0).astype(int)
+	
+	sat[neigh==0] = 0
+	
+	neigh[neigh==0] = 1
+	
+	sat = sat/neigh
 
 	return sat
 	
@@ -185,7 +193,9 @@ while(moves < T and stall < 1000):
 		car[x,y] = kind
 		car[i,j] = 0
 		
-		# ~ showCA(car)
+		
+		if (T%100 ==0):
+			showCA(car)
 
 		moves += 1
 		stall = 0
