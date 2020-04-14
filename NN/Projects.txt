@@ -1,0 +1,12 @@
+Coen - MLB Team Pitchers: Inputs W/L Stats, Team W/L; Output -> W/L
+Eric - Overwatch: Deaths, HPG, .. ..., : -> Rank Category
+Isha - Crime rates: poverty, pop, ?? -> (Low/Med/High)
+Ryan - ? Apple store apps: Ratings, downloads, cost
+Jaden - North Korean Nukes: Missile Type, Origin, Maybe date -> Success/Failure
+Michael - Demo, ages, men/women, etc -> Violence rate
+Kaden - Car crashes. Time, lighting (binary), place, weather -> Property damage, injury, death, etc. (Pick worst)
+Tyler - Box office movies: google trends, youtube trailer views, ... -> Box office success (categorized?)
+Crafton - Youtube: views, subscribed, likes/dislikes-> Demonetized
+Timothy - Houses: 
+Jayden H - engine, etc.-> Make of car; reviews, opening weekend, runtime, etc. -> genre
+Laney - population 70 years ago, population now, population in captivity now -> Endangered animal classifaction

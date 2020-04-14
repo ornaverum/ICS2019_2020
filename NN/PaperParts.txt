@@ -1,0 +1,32 @@
+Introduction
+	[Background information. Discuss the problem you are solving or addressing.
+	Research that other people have done that is similar or address the same
+	problem. Any other research that the reader needs to understand what you 
+	are doing.
+	Assume your audience is at the level of a knowledgeable, but not expert, person.]
+	
+	Has sources.
+
+Procedure
+	What you did, step by step in order, so someone else could repeat it.
+	(Don't include code, but have an appendix).
+	Where you got the data. (Cite this source).
+	How you pre-processed the data (cleaning it up, normalizing it, etc).
+	NNs - layers, shuffling, cv, etc.
+
+	Past tense, 3rd person passive voice
+	
+Data and Results
+	Graph of input variables (like with iris data)
+		Give title.
+		Somehow express variable names, ideally with labels
+		Have a caption
+	Give scores and cross validation
+	Maybe do some predictions
+	Use a paragraph to discuss and interpret your results.
+
+Conclusion
+	Summarize everything in a paragraph (a sentence or two from each section.)
+	Paragraph (couple of sentences): Did you make progress in solving your 
+	main problem with your project?
+	Sources of error and their effect.
