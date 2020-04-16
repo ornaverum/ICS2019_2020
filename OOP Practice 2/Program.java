@@ -16,6 +16,101 @@ public class Program
 	
 }
 
+interface being{
+	being tryToReproduce();
+	
+	int[] getPos();
+	
+	void setPos(int x, int y);
+	
+	void feed(int dE);
+	
+	int getEnergy();
+	
+	void setEnergy(int E);
+	
+	int die();
+}
+
+
+class grass implements being{
+	int x, y;
+	int energy;
+	public static final int REPRODUCTION_ENERGY_THRESHOLD = 2;
+	
+	grass(){
+		x = 0;
+		y = 0;
+		energy = 0;
+	}
+	
+	grass(int x, int y, int e){
+		this.x = x;
+		this.y = y;
+		energy = e;
+	}
+	
+	public void setPos(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int[] getPos(){ return {x, y}; }
+	
+	public int getEnergy(){	return energy;}
+	
+	public void setEnergy(int e) { energy = e; }
+	
+	public void tryToReproduce(){
+		Random rand = new Random();
+		int dx, dy;
+		dx = rand.nextInt(-1,1);
+		dy = rand.nextInt(-1,1);
+		
+		
+	}
+	
+}
+
+class critter implements being{
+	int x, y;
+	int energy;
+	
+	grass(){
+		x = 0;
+		y = 0;
+		energy = 0;
+	}
+	
+	grass(int x, int y, int e){
+		this.x = x;
+		this.y = y;
+		energy = e;
+	}
+	
+	public void setPos(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+	
+	public int[] getPos(){ return {x, y}; }
+	
+	public int getEnergy(){	return energy;}
+	
+	public void setEnergy(int e) { energy = e; }
+	
+	public String toString(){
+		String s = String.format("Type: %s at pos = (%d, %d)", this.getClass(), x, y);
+		return s;
+	}
+	
+}
+
+//~ class herbovore extends critter{
+	
+	
+}
+
 class ecosystem{
 	public int maxX, maxY;
 	public double grassDensity, herbDensity;
@@ -111,56 +206,6 @@ class ecosystem{
 }
 	
 	
-
-
-
-class food{
-	public int x, y;
-	public int energyGained = 10;
-	public String foodType = "";
-	
-	food(){
-		x = 0;
-		y = 0;
-	}
-	
-	food(int x, int y){
-		this.x = x;
-		this.y = y;
-		//~ System.out.printf("in Food: %d, %d, %d, %d\n", x, y, this.x, this.y);
-	}
-	
-	food(int x, int y, int E){
-		this.x = x;
-		this.y = y;
-		energyGained = E;
-	}
-	
-	public void setPos(int x, int y){
-		this.x = x;
-		this.y = y;
-	}
-	
-	public int[] getPos(){
-		int[] pos = {x, y};
-		return pos;
-	}
-	
-	public static double distance (food f1, food f2){
-		int[] pos1 = f1.getPos();
-		int[] pos2 = f2.getPos();
-		
-		double d = Math.sqrt(Math.pow(pos1[0]-pos2[0],2) + Math.pow(pos1[1]-pos2[1], 2));
-		return d;
-	}
-	
-	public String toString(){
-		String s = String.format("Type: %s at pos = (%d, %d)", this.getClass(), x, y);
-		return s;
-	}
-}
-
-
 
 class critter extends food implements eater{
 	int energy = 10;
@@ -272,13 +317,7 @@ class grass extends food{
 	}
 }
 
-interface eater{
-	void eatPrey();
-	
-	void chasePrey(double dt);
-	
-	void see(double r, ArrayList<food> foodList);
-}
+
 
 class herbovore extends critter{
 	
