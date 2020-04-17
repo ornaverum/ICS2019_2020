@@ -12,38 +12,72 @@ import java.util.Scanner;
 
 public class Program
 {
-	public static void main(String[] args)
-    {
-			Scanner scan = new Scanner(System.in);
+		public static void main(String[] args)
+	    {
+				Scanner scan = new Scanner(System.in);
 
-			System.out.printf("Enter to continue, Q to quit : ");
-			String strIn = scan.nextLine();
-				ecosystem eco = new ecosystem(10, 10);
-			while (!strIn.toUpperCase().contains("Q")){
-				eco.nextCycle();
-				eco.updateGrid();
-				eco.drawGrid();
-				strIn = scan.nextLine();
-				// System.out.printf("\n\n%s", eco);
-			}
-
-	}
+				System.out.printf("Enter to continue, Q to quit : ");
+				String strIn = scan.nextLine();
+					ecosystem eco = new ecosystem(10, 10);
+				while (!strIn.toUpperCase().contains("Q")){
+					eco.nextCycle();
+					eco.updateGrid();
+					eco.drawGrid();
+					strIn = scan.nextLine();
+					// System.out.printf("\n\n%s", eco);
+				}
+		}
 }
 
-class critter {
+class MyPanel extends JPanel implements MouseMotionListener, MouseListener
+{
+    public void paint(Graphics g)
+    {
+        //super.paint(g);
+		Graphics2D g2=(Graphics2D)g;
+        g2.setColor(Color.WHITE);
+        g2.fillRect(0,0,getWidth(),getHeight());
+        g2.setColor(new Color(100,y/2,x/2));
+        g2.fillRect(x,y,w,50);
+	}
+
+    public void mouseDragged(MouseEvent e){}
+    public void mouseMoved(MouseEvent e)
+    {
+        x=e.getX();
+        y=e.getY();
+        repaint();
+    }
+
+    public void mouseClicked(MouseEvent e){}
+    public void mouseEntered(MouseEvent e){}
+    public void mouseExited(MouseEvent e){}
+    public void mousePressed(MouseEvent e)
+    {
+        if(e.getButton()==1)w+=50;
+        else if(e.getButton()==3)w-=50;
+        repaint();
+    }
+    public void mouseReleased(MouseEvent e){}
+
+}
+
+
+
+class agent {
 	int x, y;
 	int energy;
 	int reproductionThresholdEnergy;
 
 
-	critter(){
+	agent(){
 		x = 0;
 		y = 0;
 		energy = 0;
 		reproductionThresholdEnergy = 0;
 	}
 
-	critter(int x, int y, int e, int rTE){
+	agent(int x, int y, int e, int rTE){
 		this.x = x;
 		this.y = y;
 		energy = e;
@@ -68,14 +102,13 @@ class critter {
 		String s = String.format("Type: %s at pos = (%d, %d) with energy = %d.", this.getClass(), x, y, energy);
 		return s;
 	}
-
 }
 
 
 class ecosystem{
 	public int maxX, maxY;
 	public double preyDensity, predDensity;
-	public ArrayList<critter> masterList = new ArrayList<>();
+	public ArrayList<agent> masterList = new ArrayList<>();
 	public String[][] displayGrid;
 
 	ecosystem(){
@@ -94,7 +127,7 @@ class ecosystem{
 
 	public String toString(){
 		String s = "";
-		for(critter c: masterList){
+		for(agent c: masterList){
 			s += String.format("%s\n", c.toString());
 		}
 		return s;
@@ -107,7 +140,7 @@ class ecosystem{
 			for (int j = 0; j < maxY; j ++){
 				r = rand.nextDouble();
 				if (r < preyDensity){
-					critter c = new critter(i, j, 1, 2);
+					agent c = new agent(i, j, 1, 2);
 					masterList.add(c);
 				}
 			}
@@ -120,7 +153,7 @@ class ecosystem{
 				displayGrid[i][j] = ".";
 			}
 		}
-		for (critter c:masterList){
+		for (agent c:masterList){
 			int[] pos = c.getPos();
 			int i = pos[0];
 			int j = pos[1];
@@ -146,7 +179,7 @@ class ecosystem{
 	public void nextCycle(){
 		Random rand = new Random();
 		int rx, ry;
-		for(critter c: masterList){
+		for(agent c: masterList){
 				rx = randIntRange(-1, 1);
 				ry = randIntRange(-1, 1);
 				move(c, rx, ry);
@@ -159,7 +192,7 @@ class ecosystem{
 		return r;
 	}
 
-	public void move(critter c, int dx, int dy){
+	public void move(agent c, int dx, int dy){
 		int x0, x1, y0, y1;
 		int[] pos = c.getPos();
 		x0 = pos[0];
