@@ -140,14 +140,7 @@ class agent {
 				return (distance <= visionRadius);
 		}
 
-		public void move(agent c, int dx, int dy){
-			Random rand = new Random();
-			int rx, ry;
-
-			int x0, x1, y0, y1;
-			int[] pos = c.getPos();
-			x0 = pos[0];
-			y0 = pos[1];
+		public void move(dx, dy){
 			if (x0 + dx >= maxX){
 				x1 = x0 + dx - maxX;
 			} else if (x0 + dx < 0) {
