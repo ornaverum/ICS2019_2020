@@ -259,7 +259,6 @@ class ecosystem{
 	public double preyDensity, predDensity;
 	public ArrayList<agent> masterList = new ArrayList<>();
 	public int[][] displayGrid;
-	public int[][] world;
 
 	ecosystem(){
 	}
@@ -271,7 +270,6 @@ class ecosystem{
 		this.maxY = maxY;
 		populate();
 		displayGrid = new int[maxX][maxY];
-		world = new int[maxX][maxY];
 		updateGrid();
 		drawGrid();
 	}
@@ -314,19 +312,15 @@ class ecosystem{
 		for (int i = 0; i < maxX; i ++){
 			for (int j = 0; j < maxY; j ++){
 				displayGrid[i][j] = 0;
-				world[i][j] = -1;
 			}
 		}
-		int k = 0;
 		for (agent c:masterList){
 			int[] pos = c.getPos();
-			// s = String.format("%s", c.getClass());
+			s = String.format("%s", c.getClass());
 			// System.out.println(s);
 			int i = pos[0];
 			int j = pos[1];
-			displayGrid[i][j]= (c instanceof herbovore)?1:2;
-			world[i][j] = k;
-			k++;
+			displayGrid[i][j]=s.contains("herbovore")?1:2;
 			// String type = String.format("%s", f.getClass());
 			// if(type.contains("grass")){
 			// 	displayGrid[i][j] = "g";
@@ -339,14 +333,36 @@ class ecosystem{
 	public void drawGrid(){
 		for (int i = 0; i < maxX; i ++){
 			for (int j = 0; j < maxY; j ++){
-				// System.out.printf( "%d", displayGrid[i][j] );
-				System.out.printf( "%d", world[i][j] );
+				System.out.printf( "%d", displayGrid[i][j] );
 			}
 			System.out.printf("\n");
 		}
 	}
 
-
+	// public void move(agent c, int dx, int dy){
+	// 	int[] pos = c.getPos();
+	// 	int x0 = pos[0];
+	// 	int y0 = pos[1];
+	//
+	// 	int y1, x1;
+	//
+	// 	if (x0 + dx >= maxX){
+	// 		x1 = x0 + dx - maxX;
+	// 	} else if (x0 + dx < 0) {
+	// 		x1 = x0 + dx + maxX;
+	// 	} else {
+	// 		x1 = x0 + dx;
+	// 	}
+	//
+	// 	if (y0 + dy >= maxY){
+	// 		y1 = y0 + dy - maxY;
+	// 	} else if (y0 + dy < 0) {
+	// 		y1 = y0 + dy + maxY;
+	// 	} else {
+	// 		y1 = y0 + dy;
+	// 	}
+	// 	c.setPos(x1, y1);
+	// }
 
 
 	public static int randIntRange(int min, int max){
@@ -374,40 +390,53 @@ class ecosystem{
 		}
 	}
 
+	public void findTargets(){
+			double dMin, d;
+			double cx, cy;
+			double tx, ty;
+			int[] cpos;
+			int[] tpos;
 
-	public double getDistance(int[] pos1, int[] pos2){
-			double x1, x2, y1, y2;
-			x1 = (double) pos1[0]; y1 = (double) pos1[1];
-			x2 = (double) pos2[0]; y2 = (double) pos2[1];
-			if ( (x2 - x1)*2 > maxX) x2 = maxX - x2;
-			if ( (y2 - y1)*2 > maxY) y2 = maxY - y2;
-			return Math.hypot(x1-x2, y1-y2);
-	}
-
-	public int mod(int x, int max){
-			if (x > max) return x - max;
-			else if x < 0 return x + max;
-			else return x;
-	}
-
-
-	public void setTargets(){
-			int r;
-			double dMax;
-			for (int i = 0; i < maxX; i++){
-					for (int j = 0; i < maxY; j++){
-							if (world[i][j]>=0){
-									agent c = masterList.get(world[i][j]);
-									r = c.visionRadius;
-									dMax = 2*r;
-									for (int m = i - r; m < i + r; m ++){
-											for (int n = j - r; n < j + r; n ++){
-
+			for(agent c: masterList){
+					if (c instanceof carnivore){
+							dMin = Math.hypot(maxX, maxY);
+							cpos = c.getPos();
+							cx = cpos[0]; cy = cpos[1];
+							for(agent t: masterList){
+									if ( t instanceof herbovore ){
+											tpos = t.getPos();
+											tx = tpos[0]; ty = tpos[1];
+											d = Math.hypot(cx - tx, cy-ty);
+											if (d < dMin){
+													d = dMin;
+													( (carnivore) c ).prey = (herbovore) t;
 											}
+
+									}
+							}
+					}
+			}
+
+			for(agent c: masterList){
+					if (c instanceof herbovore ){
+							dMin = Math.hypot(maxX, maxY);
+							cpos = c.getPos();
+							cx = cpos[0]; cy = cpos[1];
+							for(agent t: masterList){
+									if ( t instanceof carnivore ){
+											tpos = t.getPos();
+											tx = tpos[0]; ty = tpos[1];
+											d = Math.hypot(cx - tx, cy-ty);
+											if (d < dMin){
+													d = dMin;
+													( (herbovore) c).predator = (carnivore) t;
+											}
+
 									}
 							}
 					}
 			}
 	}
+
 
 }
