@@ -90,6 +90,7 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
 
 class agent {
 		int x, y;
+		int xNew, yNew;
 		int energy;
 		public int reproductionThresholdEnergy;
 		public double visionRadius;
@@ -125,6 +126,11 @@ class agent {
 		public int[] getPos(){
 			int[] pos = {x, y};
 			return pos;
+		}
+
+		public void setNewPos(int x, int y){
+				xNew = x;
+				yNew = y;
 		}
 
 		public int getEnergy(){	return energy;}
@@ -186,18 +192,23 @@ class agent {
 			} else {
 				y1 = y0 + dy;
 			}
-			setPos(x1, y1);
+			setNewPos(x1, y1);
 		}
 
+		public void updatePos(){
+				x = xNew;
+				y = yNew;
+		}
 
 
 }
 
 interface critter{
-		critter reproduce();
+		void reproduce();
 		void move();
 		void look();
 		void act();
+		void eat();
 }
 
 class herbovore extends agent implements critter{
@@ -213,15 +224,31 @@ class herbovore extends agent implements critter{
 		}
 
 		public void move(){
-
+				setNewPos(x, y);
+				updatePos();
 		}
 
 		public void act(){
+				eat();
 				look();
 				move();
+				if (energy >= reproductionThresholdEnergy){
+					reproduce();
+					energy -= reproductionThresholdEnergy;
+				}
 		}
 
-		public critter reproduce(){return null;}
+		public void eat(){
+			energy++;
+		}
+
+		public void reproduce(){
+			herbovore c = eco.addNewHerbovore(x,y);
+			int[] dr;
+			dr = c.getRandomMove(1);
+			c.step(dr[0], dr[1]);
+			c.updatePos();
+		}
 }
 
 
@@ -249,7 +276,9 @@ class carnivore extends agent implements critter{
 			move();
 		}
 
-		public critter reproduce(){return null;}
+		public void eat(){}
+
+		public void reproduce(){}
 }
 
 
@@ -287,26 +316,37 @@ class ecosystem{
 	public void populate(){
 		Random rand = new Random();
 		double r;
+		agent c;
 		for (int i = 0; i < maxX; i ++){
 			for (int j = 0; j < maxY; j ++){
 				r = rand.nextDouble();
 				if (r < preyDensity){
-						herbovore c = new herbovore(i, j, 1);//, 5, 5.0, 1);
-						c.eco = this;
-						c.speed = 1;
-						c.reproductionThresholdEnergy = 5;
-						c.visionRadius = 8;
-						masterList.add(c);
+						c = addNewHerbovore(i,j);
 				} else if (r < preyDensity + predDensity) {
-						carnivore c = new carnivore(i, j, 1);//, 2, 5.0, 2);
-						c.eco = this;
-						c.speed = 2;
-						c.reproductionThresholdEnergy = 2;
-						c.visionRadius = 5;
-						masterList.add(c);
+						c = addNewCarnivore(i,j);
 				}
 			}
 		}
+	}
+
+	public herbovore addNewHerbovore(int i, int j){
+		herbovore c = new herbovore(i, j, 1);//, 5, 5.0, 1);
+		c.eco = this;
+		c.speed = 1;
+		c.reproductionThresholdEnergy = 5;
+		c.visionRadius = 8;
+		masterList.add(c);
+		return c;
+	}
+
+	public carnivore addNewCarnivore(int i, int j){
+		carnivore c = new carnivore(i, j, 1);//, 2, 5.0, 2);
+		c.eco = this;
+		c.speed = 2;
+		c.reproductionThresholdEnergy = 2;
+		c.visionRadius = 5;
+		masterList.add(c);
+		return c;
 	}
 
 	public void updateGrid(){
@@ -372,6 +412,9 @@ class ecosystem{
 
 				}
 		}
+		for(agent c: masterList){
+				c.updatePos();
+		}
 	}
 
 
@@ -386,7 +429,7 @@ class ecosystem{
 
 	public int mod(int x, int max){
 			if (x > max) return x - max;
-			else if x < 0 return x + max;
+			else if (x < 0) return x + max;
 			else return x;
 	}
 
@@ -398,7 +441,7 @@ class ecosystem{
 					for (int j = 0; i < maxY; j++){
 							if (world[i][j]>=0){
 									agent c = masterList.get(world[i][j]);
-									r = c.visionRadius;
+									r = (int) Math.ceil(c.visionRadius);
 									dMax = 2*r;
 									for (int m = i - r; m < i + r; m ++){
 											for (int n = j - r; n < j + r; n ++){
