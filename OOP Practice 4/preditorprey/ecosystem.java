@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.ArrayList.*;
 import java.util.Random;
 
-package com.ics.preditorprey;
+package preditorprey;
 
 class ecosystem{
 	public int maxX, maxY;

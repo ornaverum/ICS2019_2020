@@ -1,4 +1,4 @@
-package com.ics.preditorprey;
+package preditorprey;
 
 class herbovore extends agent implements critter{
 

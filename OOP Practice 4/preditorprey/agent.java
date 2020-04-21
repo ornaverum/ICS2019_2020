@@ -1,5 +1,5 @@
 
-package com.ics.preditorprey;
+package preditorprey;
 
 class agent {
 		int x, y;

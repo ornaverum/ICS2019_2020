@@ -1,4 +1,4 @@
-package com.ics.preditorprey;
+package preditorprey;
 
 class carnivore extends agent implements critter{
 		agent prey = null;

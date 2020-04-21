@@ -8,7 +8,7 @@ import java.util.Random;
 
 import java.util.Scanner;
 
-import com.ics.preditorprey.*;
+import preditorprey.*;
 
 // test git
 

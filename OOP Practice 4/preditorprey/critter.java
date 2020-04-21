@@ -1,5 +1,5 @@
 
-package com.ics.preditorprey;
+package preditorprey;
 
 interface critter{
 		critter reproduce();
