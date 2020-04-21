@@ -374,7 +374,7 @@ class ecosystem{
 	public void nextCycle(){
 		Random rand = new Random();
 		int rx, ry;
-		findTargets();
+		//findTargets();
 		for(agent c: masterList){
 				// rx = randIntRange(-1, 1);
 				// ry = randIntRange(-1, 1);
@@ -391,51 +391,51 @@ class ecosystem{
 	}
 
 	public void findTargets(){
-		double dMin, d;
-		double cx, cy;
-		double tx, ty;
-		int[] cpos;
-		int[] tpos;
+			double dMin, d;
+			double cx, cy;
+			double tx, ty;
+			int[] cpos;
+			int[] tpos;
 
-		for(agent c: masterList){
-				if (c instanceof carnivore){
-						dMin = Math.hypot(maxX, maxY);
-						cpos = c.getPos();
-						cx = cpos[0]; cy = cpos[1];
-						for(agent t: masterList){
-								if ( t instanceof herbovore ){
-									tpos = t.getPos();
-									tx = tpos[0]; ty = tpos[1];
-									d = Math.hypot(cx - tx, cy-ty);
-									if (d < dMin){
-										d = dMin;
-										( (carnivore) c ).prey = (herbovore) t;
+			for(agent c: masterList){
+					if (c instanceof carnivore){
+							dMin = Math.hypot(maxX, maxY);
+							cpos = c.getPos();
+							cx = cpos[0]; cy = cpos[1];
+							for(agent t: masterList){
+									if ( t instanceof herbovore ){
+											tpos = t.getPos();
+											tx = tpos[0]; ty = tpos[1];
+											d = Math.hypot(cx - tx, cy-ty);
+											if (d < dMin){
+													d = dMin;
+													( (carnivore) c ).prey = (herbovore) t;
+											}
+
 									}
+							}
+					}
+			}
 
-								}
-						}
-				}
-		}
+			for(agent c: masterList){
+					if (c instanceof herbovore ){
+							dMin = Math.hypot(maxX, maxY);
+							cpos = c.getPos();
+							cx = cpos[0]; cy = cpos[1];
+							for(agent t: masterList){
+									if ( t instanceof carnivore ){
+											tpos = t.getPos();
+											tx = tpos[0]; ty = tpos[1];
+											d = Math.hypot(cx - tx, cy-ty);
+											if (d < dMin){
+													d = dMin;
+													( (herbovore) c).predator = (carnivore) t;
+											}
 
-		for(agent c: masterList){
-				if (c instanceof herbovore ){
-						dMin = Math.hypot(maxX, maxY);
-						cpos = c.getPos();
-						cx = cpos[0]; cy = cpos[1];
-						for(agent t: masterList){
-								if ( t instanceof carnivore ){
-									tpos = t.getPos();
-									tx = tpos[0]; ty = tpos[1];
-									d = Math.hypot(cx - tx, cy-ty);
-									if (d < dMin){
-										d = dMin;
-										( (herbovore) c).predator = (carnivore) t;
 									}
-
-								}
-						}
-				}
-		}
+							}
+					}
+			}
 	}
 
 
