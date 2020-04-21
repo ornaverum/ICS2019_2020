@@ -93,6 +93,7 @@ class agent {
 		int energy;
 		int reproductionThresholdEnergy;
 		double visionRadius;
+		int speed;
 
 		agent(){
 			x = 0;
@@ -100,14 +101,16 @@ class agent {
 			energy = 0;
 			reproductionThresholdEnergy = 0;
 			visionRadius = 0;
+			speed = 1;
 		}
 
-		agent(int x, int y, int e, int rTE, double vR){
+		agent(int x, int y, int e, int rTE, double vR, int speed){
 			this.x = x;
 			this.y = y;
 			energy = e;
 			reproductionThresholdEnergy = rTE;
 			visionRadius = vR;
+			this.speed = speed;
 		}
 
 		public void setPos(int x, int y){
@@ -140,45 +143,19 @@ class agent {
 				return (distance <= visionRadius);
 		}
 
-		public void move(dx, dy){
-			if (x0 + dx >= maxX){
-				x1 = x0 + dx - maxX;
-			} else if (x0 + dx < 0) {
-				x1 = x0 + dx + maxX;
-			} else {
-				x1 = x0 + dx;
-			}
-
-			if (y0 + dy >= maxY){
-				y1 = y0 + dy - maxY;
-			} else if (y0 + dy < 0) {
-				y1 = y0 + dy + maxY;
-			} else {
-				y1 = y0 + dy;
-			}
-
-		}
-
-		public int[] dr getRandomMove(int speed){
-				int rx, ry;
-				rx = randIntRange(-speed, speed);
-				ry = randIntRange(-speed, speed);
-				int[] dr = {rx, ry};
-				return dr;
-		}
-
-
-		public static int randIntRange(int min, int max){
-			Random rand = new Random();
-			int r = rand.nextInt( (max-min) + 1) + min;
-			return r;
-		}
+		// public int[] getRandomMove(int speed){
+		// 		int rx, ry;
+		// 		rx = randIntRange(-speed, speed);
+		// 		ry = randIntRange(-speed, speed);
+		// 		int[] dr = {rx, ry};
+		// 		return dr;
+		// }
 
 }
 
 interface critter{
 		critter reproduce();
-		void move();
+		// void move();
 		void look();
 }
 
@@ -186,8 +163,8 @@ class herbovore extends agent implements critter{
 
 		agent predator = null;
 
-		herbovore(int x, int y, int e, int rTE, double vR){
-				super(x,  y,  e, rTE, vR);
+		herbovore(int x, int y, int e, int rTE, double vR, int speed){
+				super(x,  y,  e, rTE, vR, speed);
 		}
 
 		public void look(){
@@ -204,23 +181,22 @@ class herbovore extends agent implements critter{
 
 class carnivore extends agent implements critter{
 		agent prey = null;
-		speed = 2;
+		// speed = 2;
 
-		carnivore(int x, int y, int e, int rTE, double vR){
-				super(x,  y,  e, rTE, vR);
+		carnivore(int x, int y, int e, int rTE, double vR, int speed){
+				super(x,  y,  e, rTE, vR, speed);
 		}
 
 		public void look(){
 
 		}
 
-		public void move(){
-				if (prey == null){
-						int[] dr = getRandomMove(speed);
-						move(dr[0], dr[1]);
-
-				}
-		}
+		// public void move(){
+		// 		if (prey == null){
+		// 				int[] dr = getRandomMove(speed);
+		// 				move(dr[0], dr[1]);
+		// 		}
+		// }
 
 		public critter reproduce(){return null;}
 }
@@ -262,10 +238,10 @@ class ecosystem{
 			for (int j = 0; j < maxY; j ++){
 				r = rand.nextDouble();
 				if (r < preyDensity){
-						herbovore c = new herbovore(i, j, 1, 5, 5.0);
+						herbovore c = new herbovore(i, j, 1, 5, 5.0, 1);
 						masterList.add(c);
 				} else if (r < preyDensity + predDensity) {
-						carnivore c = new carnivore(i, j, 1, 2, 5.0);
+						carnivore c = new carnivore(i, j, 1, 2, 5.0, 2);
 						masterList.add(c);
 				}
 			}
@@ -304,14 +280,46 @@ class ecosystem{
 		}
 	}
 
+	public void move(agent c, int dx, int dy){
+		int[] pos = c.getPos();
+		int x0 = pos[0];
+		int y0 = pos[1];
+
+		int y1, x1;
+
+		if (x0 + dx >= maxX){
+			x1 = x0 + dx - maxX;
+		} else if (x0 + dx < 0) {
+			x1 = x0 + dx + maxX;
+		} else {
+			x1 = x0 + dx;
+		}
+
+		if (y0 + dy >= maxY){
+			y1 = y0 + dy - maxY;
+		} else if (y0 + dy < 0) {
+			y1 = y0 + dy + maxY;
+		} else {
+			y1 = y0 + dy;
+		}
+		c.setPos(x1, y1);
+	}
+
+
+	public static int randIntRange(int min, int max){
+		Random rand = new Random();
+		int r = rand.nextInt( (max-min) + 1) + min;
+		return r;
+	}
+
 	public void nextCycle(){
 		Random rand = new Random();
 		int rx, ry;
 		for(agent c: masterList){
-				// rx = randIntRange(-1, 1);
-				// ry = randIntRange(-1, 1);
-				// move(c, rx, ry);
-				c.move();
+				rx = randIntRange(-1, 1);
+				ry = randIntRange(-1, 1);
+				move(c, rx, ry);
+				// c.move();
 		}
 	}
 
