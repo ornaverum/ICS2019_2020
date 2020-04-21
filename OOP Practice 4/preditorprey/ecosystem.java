@@ -1,5 +1,9 @@
 package preditorprey;
 
+import java.util.ArrayList;
+import java.util.ArrayList.*;
+import java.util.Random;
+
 public class ecosystem{
 	public int maxX, maxY;
 	public double preyDensity, predDensity;

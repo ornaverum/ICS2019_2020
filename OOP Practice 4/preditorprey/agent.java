@@ -1,4 +1,5 @@
 package preditorprey;
+import java.util.Random;
 
 public class agent {
 		int x, y;

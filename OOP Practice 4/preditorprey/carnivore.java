@@ -1,5 +1,6 @@
 package preditorprey;
 
+
 public class carnivore extends agent implements critter{
 		agent prey = null;
 		// speed = 2;

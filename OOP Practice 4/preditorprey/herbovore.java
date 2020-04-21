@@ -1,5 +1,6 @@
 package preditorprey;
 
+
 public class herbovore extends agent implements critter{
 
 		agent predator = null;
