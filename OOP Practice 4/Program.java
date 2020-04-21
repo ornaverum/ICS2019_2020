@@ -8,9 +8,9 @@ import java.util.Random;
 
 import java.util.Scanner;
 
-import preditorprey.*;
-
 // test git
+
+import preditorprey.*;
 
 public class Program{
 
@@ -72,13 +72,11 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
 	}
 
     public void mouseDragged(MouseEvent e){}
-    public void mouseMoved(MouseEvent e)    {
-    }
-
+    public void mouseMoved(MouseEvent e) {}
     public void mouseClicked(MouseEvent e){}
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
-    public void mousePressed(MouseEvent e)    {
+    public void mousePressed(MouseEvent e){
 				eco.nextCycle();
 				eco.updateGrid();
 				// eco.drawGrid();

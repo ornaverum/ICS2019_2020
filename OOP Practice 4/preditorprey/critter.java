@@ -1,9 +1,9 @@
-
 package preditorprey;
 
-interface critter{
-		critter reproduce();
+public interface critter{
+		void reproduce();
 		void move();
 		void look();
 		void act();
+		void eat();
 }

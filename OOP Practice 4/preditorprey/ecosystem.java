@@ -1,20 +1,17 @@
-import java.util.ArrayList;
-import java.util.ArrayList.*;
-import java.util.Random;
-
 package preditorprey;
 
-class ecosystem{
+public class ecosystem{
 	public int maxX, maxY;
 	public double preyDensity, predDensity;
 	public ArrayList<agent> masterList = new ArrayList<>();
+	public ArrayList<agent> babyList = new ArrayList<>();
 	public int[][] displayGrid;
 	public int[][] world;
 
-	ecosystem(){
+	public ecosystem(){
 	}
 
-	ecosystem(int maxX, int maxY){
+	public ecosystem(int maxX, int maxY){
 		this.maxX = maxX;
 		preyDensity = 0.01;
 		predDensity = 0.005;
@@ -23,6 +20,7 @@ class ecosystem{
 		displayGrid = new int[maxX][maxY];
 		world = new int[maxX][maxY];
 		updateGrid();
+		// growup();
 		drawGrid();
 	}
 
@@ -37,26 +35,43 @@ class ecosystem{
 	public void populate(){
 		Random rand = new Random();
 		double r;
+		agent c;
 		for (int i = 0; i < maxX; i ++){
 			for (int j = 0; j < maxY; j ++){
 				r = rand.nextDouble();
 				if (r < preyDensity){
-						herbovore c = new herbovore(i, j, 1);//, 5, 5.0, 1);
-						c.eco = this;
-						c.speed = 1;
-						c.reproductionThresholdEnergy = 5;
-						c.visionRadius = 8;
-						masterList.add(c);
+						c = addNewHerbovore(i,j);
 				} else if (r < preyDensity + predDensity) {
-						carnivore c = new carnivore(i, j, 1);//, 2, 5.0, 2);
-						c.eco = this;
-						c.speed = 2;
-						c.reproductionThresholdEnergy = 2;
-						c.visionRadius = 5;
-						masterList.add(c);
+						c = addNewCarnivore(i,j);
 				}
 			}
 		}
+		growup();
+	}
+
+	public herbovore addNewHerbovore(int i, int j){
+		herbovore c = new herbovore(i, j, 1);//, 5, 5.0, 1);
+		c.eco = this;
+		c.speed = 1;
+		c.reproductionThresholdEnergy = 5;
+		c.visionRadius = 8;
+		babyList.add(c);
+		return c;
+	}
+
+	public carnivore addNewCarnivore(int i, int j){
+		carnivore c = new carnivore(i, j, 1);//, 2, 5.0, 2);
+		c.eco = this;
+		c.speed = 2;
+		c.reproductionThresholdEnergy = 2;
+		c.visionRadius = 5;
+		babyList.add(c);
+		return c;
+	}
+
+	public void growup(){
+		masterList.addAll(babyList);
+		babyList.clear();
 	}
 
 	public void updateGrid(){
@@ -110,17 +125,18 @@ class ecosystem{
 		int rx, ry;
 		//findTargets();
 		for(agent c: masterList){
-				// rx = randIntRange(-1, 1);
-				// ry = randIntRange(-1, 1);
-				// move(c, rx, ry);
 				if (c instanceof carnivore){
 					((carnivore) c).act();
 				}
 				else if (c instanceof herbovore){
 					((herbovore) c).act();
-				} else {
+				} else {}
+		}
 
-				}
+		growup();
+
+		for(agent c: masterList){
+				c.updatePos();
 		}
 	}
 
@@ -148,7 +164,7 @@ class ecosystem{
 					for (int j = 0; i < maxY; j++){
 							if (world[i][j]>=0){
 									agent c = masterList.get(world[i][j]);
-									r = c.visionRadius;
+									r = (int) Math.ceil(c.visionRadius);
 									dMax = 2*r;
 									for (int m = i - r; m < i + r; m ++){
 											for (int n = j - r; n < j + r; n ++){

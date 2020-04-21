@@ -1,8 +1,8 @@
-
 package preditorprey;
 
-class agent {
+public class agent {
 		int x, y;
+		int xNew, yNew;
 		int energy;
 		public int reproductionThresholdEnergy;
 		public double visionRadius;
@@ -10,7 +10,7 @@ class agent {
 		public int speed;
 		ecosystem eco;
 
-		agent(){
+		public agent(){
 			x = 0;
 			y = 0;
 			energy = 0;
@@ -20,7 +20,7 @@ class agent {
 			seesTarget = false;
 		}
 
-		agent(int x, int y, int e){
+		public agent(int x, int y, int e){
 			this.x = x;
 			this.y = y;
 			energy = e;
@@ -38,6 +38,11 @@ class agent {
 		public int[] getPos(){
 			int[] pos = {x, y};
 			return pos;
+		}
+
+		public void setNewPos(int x, int y){
+				xNew = x;
+				yNew = y;
 		}
 
 		public int getEnergy(){	return energy;}
@@ -99,9 +104,13 @@ class agent {
 			} else {
 				y1 = y0 + dy;
 			}
-			setPos(x1, y1);
+			setNewPos(x1, y1);
 		}
 
+		public void updatePos(){
+				x = xNew;
+				y = yNew;
+		}
 
 
 }
