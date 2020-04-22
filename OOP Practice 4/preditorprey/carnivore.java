@@ -1,15 +1,15 @@
-package com.ics.preditorprey;
+package preditorprey;
 
-class carnivore extends agent implements critter{
+
+public class carnivore extends agent implements critter{
 		agent prey = null;
 		// speed = 2;
 
-		carnivore(int x, int y, int e){
+		public carnivore(int x, int y, int e){
 				super(x,  y,  e);
 		}
 
 		public void look(){
-
 		}
 
 		public void move(){
@@ -24,5 +24,7 @@ class carnivore extends agent implements critter{
 			move();
 		}
 
-		public critter reproduce(){return null;}
+		public void eat(){}
+
+		public void reproduce(){}
 }

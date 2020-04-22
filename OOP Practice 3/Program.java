@@ -70,13 +70,11 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
 	}
 
     public void mouseDragged(MouseEvent e){}
-    public void mouseMoved(MouseEvent e)    {
-    }
-
+    public void mouseMoved(MouseEvent e) {}
     public void mouseClicked(MouseEvent e){}
     public void mouseEntered(MouseEvent e){}
     public void mouseExited(MouseEvent e){}
-    public void mousePressed(MouseEvent e)    {
+    public void mousePressed(MouseEvent e){
 				eco.nextCycle();
 				eco.updateGrid();
 				// eco.drawGrid();
@@ -220,12 +218,13 @@ class herbovore extends agent implements critter{
 		}
 
 		public void look(){
-
 		}
 
 		public void move(){
-				setNewPos(x, y);
-				updatePos();
+				if (predator == null){
+						int[] dr = getRandomMove(speed);
+						step(dr[0], dr[1]);
+				}
 		}
 
 		public void act(){
@@ -243,6 +242,7 @@ class herbovore extends agent implements critter{
 		}
 
 		public void reproduce(){
+			System.out.printf("In %s reproduce: E = %d\n", this.getClass(), energy);
 			herbovore c = eco.addNewHerbovore(x,y);
 			int[] dr;
 			dr = c.getRandomMove(1);
@@ -261,7 +261,6 @@ class carnivore extends agent implements critter{
 		}
 
 		public void look(){
-
 		}
 
 		public void move(){
@@ -287,6 +286,7 @@ class ecosystem{
 	public int maxX, maxY;
 	public double preyDensity, predDensity;
 	public ArrayList<agent> masterList = new ArrayList<>();
+	public ArrayList<agent> babyList = new ArrayList<>();
 	public int[][] displayGrid;
 	public int[][] world;
 
@@ -302,6 +302,7 @@ class ecosystem{
 		displayGrid = new int[maxX][maxY];
 		world = new int[maxX][maxY];
 		updateGrid();
+		// growup();
 		drawGrid();
 	}
 
@@ -327,6 +328,7 @@ class ecosystem{
 				}
 			}
 		}
+		growup();
 	}
 
 	public herbovore addNewHerbovore(int i, int j){
@@ -335,7 +337,7 @@ class ecosystem{
 		c.speed = 1;
 		c.reproductionThresholdEnergy = 5;
 		c.visionRadius = 8;
-		masterList.add(c);
+		babyList.add(c);
 		return c;
 	}
 
@@ -345,8 +347,13 @@ class ecosystem{
 		c.speed = 2;
 		c.reproductionThresholdEnergy = 2;
 		c.visionRadius = 5;
-		masterList.add(c);
+		babyList.add(c);
 		return c;
+	}
+
+	public void growup(){
+		masterList.addAll(babyList);
+		babyList.clear();
 	}
 
 	public void updateGrid(){
@@ -400,18 +407,16 @@ class ecosystem{
 		int rx, ry;
 		//findTargets();
 		for(agent c: masterList){
-				// rx = randIntRange(-1, 1);
-				// ry = randIntRange(-1, 1);
-				// move(c, rx, ry);
 				if (c instanceof carnivore){
 					((carnivore) c).act();
 				}
 				else if (c instanceof herbovore){
 					((herbovore) c).act();
-				} else {
-
-				}
+				} else {}
 		}
+
+		growup();
+
 		for(agent c: masterList){
 				c.updatePos();
 		}
