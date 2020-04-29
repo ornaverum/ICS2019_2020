@@ -54,6 +54,9 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
 				int[] pos;
 				int i, j;
 				for(Animal a: eco.animalList){
+
+					if (a instanceof Prey) g2.setColor(Color.GREEN);
+					else if (a instanceof Preditor) g2.setColor(Color.RED);
 					pos = a.getPos();
 					i = pos[0];
 					j = pos[1];

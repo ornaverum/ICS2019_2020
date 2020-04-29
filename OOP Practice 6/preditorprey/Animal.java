@@ -67,8 +67,15 @@ public class Animal{
 
 	public void act(){
 		int dx, dy;
-		dx = randInt(-1, 1);
-		dy = randInt(-1, 1);
+		dx = randInt(-speed, speed);
+		dy = randInt(-speed, speed);
 		move(dx, dy);
 	}
+
+	public void die(){
+		if (energy <= 0){
+			eco.killList.add(this);
+		}
+	}
+
 }
