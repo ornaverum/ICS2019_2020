@@ -17,6 +17,7 @@ public class Program{
 		int dim = ECO_SIZE*SQ_SIZE;
 		
 		Ecosystem eco = new Ecosystem(ECO_SIZE, ANIMAL_DENSITY);
+		
 		JFrame frame = new JFrame("Example");
         MyPanel panel=new MyPanel();
         panel.setPreferredSize(new Dimension(dim, dim));

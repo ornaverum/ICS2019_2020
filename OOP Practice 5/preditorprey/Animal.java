@@ -48,10 +48,10 @@ public class Animal{
 	public void move(int dx, int dy){
 		x += dx;
 		y += dy;
-		if (x >= eco.size) x-=eco.size;
-		if (x < 0) x += eco.size;
-		if (y >= eco.size) y-=eco.size;
-		if (y < 0) y += eco.size;
+
+		x = Math.floorMod(x, eco.size);
+		y = Math.floorMod(y, eco.size);
+		
 	}
 
 	// getters and setters
