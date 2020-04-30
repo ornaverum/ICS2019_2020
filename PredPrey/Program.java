@@ -34,7 +34,7 @@ public class Program{
 		
 		while(true)
         {	
-			
+			eco.update();
             panel.repaint();
             try{Thread.sleep(100);}catch(Exception e){}
         }
@@ -52,7 +52,7 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
         g2.fillRect(0,0,getWidth(),getHeight());
         
         
-        g2.setColor(Color.GREEN);
+        g2.setColor(Color.GRAY);
         for(int i = 0; i < eco.size; i++){
 			for(int j = 0; j<eco.size; j++){
 				if (eco.drawGrid[i][j]>0){
