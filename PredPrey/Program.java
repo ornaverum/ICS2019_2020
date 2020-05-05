@@ -8,16 +8,16 @@ public class Program{
 	// I'm setting this as constants for now
 	// Some of these could later be refactored as model or GUI parameters.
 
-	public static final int ECO_SIZE = 100;
+	public static final int ECO_SIZE = 20;
 	public static final int SQ_SIZE = 10;
 	public static final double ANIMAL_DENSITY = 0.05;
-	
+
 	public static void main(String[] args){
-		
+
 		int dim = ECO_SIZE*SQ_SIZE;
-		
+
 		Ecosystem eco = new Ecosystem(ECO_SIZE, ANIMAL_DENSITY);
-		
+
 		JFrame frame = new JFrame("Example");
         MyPanel panel=new MyPanel();
         panel.setPreferredSize(new Dimension(dim, dim));
@@ -29,11 +29,11 @@ public class Program{
         frame.pack();
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		
-		
+
+
+
 		while(true)
-        {	
+        {
 			eco.update();
             panel.repaint();
             try{Thread.sleep(100);}catch(Exception e){}
@@ -44,14 +44,14 @@ public class Program{
 class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
     public int sqSize;
     Ecosystem eco;
-    
+
     public void paint(Graphics g){
         //super.paint(g);
 		Graphics2D g2=(Graphics2D)g;
         g2.setColor(Color.WHITE);
         g2.fillRect(0,0,getWidth(),getHeight());
-        
-        
+
+
         g2.setColor(Color.GRAY);
         for(int i = 0; i < eco.size; i++){
 			for(int j = 0; j<eco.size; j++){
@@ -61,7 +61,7 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
 			}
 		}
 	}
-	
+
 	public void setSqSize(int s){sqSize = s;}
 	public void setEcosystem(Ecosystem eco){this.eco = eco;}
     public void mouseDragged(MouseEvent e){}
@@ -71,6 +71,5 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
     public void mouseExited(MouseEvent e){}
     public void mousePressed(MouseEvent e){}
     public void mouseReleased(MouseEvent e){}
-    
-}
 
+}
