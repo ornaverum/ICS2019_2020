@@ -1,4 +1,4 @@
-package preditorprey;
+package predatorprey;
 import java.util.ArrayList;
 import java.util.ArrayList.*;
 import java.util.Random;
@@ -63,26 +63,15 @@ public class Ecosystem{
 					a.energy = 10;
 					animalList.add(a);
 				} else if (r < animalDensity){
-					// Make Preditors
-					// Add to Animal List
+					Predator a = new Predator(i,j);
+					a.eco = this;
+					a.energy = 10;
+					animalList.add(a);
 				}
 			}
 		}
 	}
 	
-	
-	/* example loop
-		for (Animal a:animalList){
-			if (a instanceof Prey){
-			* 
-			* 	((Prey) a).PreyStuff		//This casts a as a Prey when you use Prey methods.
-			* 	do prey stuff
-			} else if (a instanceof Predator){
-			* 	do predator stuff
-			* ((Predator) a).PredatorStuff
-			* }
-		}
-		*/
 	
 	
 	public void update(){
@@ -108,14 +97,46 @@ public class Ecosystem{
 				drawGrid[i][j]=0;
 			}
 		}
-		
 		for(Animal a:animalList){
 			pos = a.getPos();
-			drawGrid[pos[0]][pos[1]] = 1;
+			if (a instanceof Prey)					// if Prey
+				drawGrid[pos[0]][pos[1]] = 1;		// if Prey
+
+			else if (a instanceof Predator) 		// if Predator
+				drawGrid[pos[0]][pos[1]] = 2;		// if Predator
+			else
+				continue;
 		}
 	}
 	
 	public void setAnimalDensity(double p){this.animalDensity = p;}
+	
+	public ArrayList<Prey> getAdjacentPrey(int x, int y){
+		// Adjacent coords
+		// xn = x -1, 0, +1
+		// yn = y -1, 0, +1
+		// account for wrapping?
+		
+		// one predator at, say (10, 11)
+		
+		ArrayList<Prey> targets = new ArrayList<>();
+		
+		int[] pos;
+		for(Animal a:animalList){
+			if (a instanceof Prey){
+				pos = a.getPos();
+				xn = a.x; yn = a.y;
+				// pos[0] = xn; pos[1] = yn;
+				// check to see if it's a neighbor of Predator at (x,y)
+				// if it is...
+				targets.add(a);
+			}
+		}
+		
+		return targets;
+		
+	}
+	
 	
 	
 

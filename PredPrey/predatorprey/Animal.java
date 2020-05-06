@@ -1,4 +1,4 @@
-package preditorprey;
+package predatorprey;
 
 public class Animal{
 

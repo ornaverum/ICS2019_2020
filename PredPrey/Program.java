@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import preditorprey.*;
+import predatorprey.*;
 
 public class Program{
 
@@ -9,8 +9,9 @@ public class Program{
 	// Some of these could later be refactored as model or GUI parameters.
 
 	public static final int ECO_SIZE = 20;
-	public static final int SQ_SIZE = 10;
+	public static final int SQ_SIZE = 20;
 	public static final double ANIMAL_DENSITY = 0.05;
+	
 
 	public static void main(String[] args){
 
@@ -52,10 +53,14 @@ class MyPanel extends JPanel implements MouseMotionListener, MouseListener{
         g2.fillRect(0,0,getWidth(),getHeight());
 
 
-        g2.setColor(Color.GRAY);
+        
         for(int i = 0; i < eco.size; i++){
 			for(int j = 0; j<eco.size; j++){
-				if (eco.drawGrid[i][j]>0){
+				if (eco.drawGrid[i][j]==1){
+					g2.setColor(Color.GRAY);
+					g2.fillRect(i*sqSize, j*sqSize, sqSize, sqSize);
+				} else if (eco.drawGrid[i][j]==2){
+					g2.setColor(Color.BLACK);
 					g2.fillRect(i*sqSize, j*sqSize, sqSize, sqSize);
 				}
 			}

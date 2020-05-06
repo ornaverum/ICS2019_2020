@@ -1,4 +1,4 @@
-package preditorprey;
+package predatorprey;
 
 public class Prey extends Animal{
 	
@@ -48,6 +48,10 @@ public class Prey extends Animal{
 			
 		checkDeath();
 		checkReproduce();
+	}
+	
+	public void sayHi(){
+		System.out.printf("%s says hi!\n", this);
 	}
 	
 }
