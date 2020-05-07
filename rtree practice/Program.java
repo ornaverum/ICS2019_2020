@@ -10,13 +10,13 @@ public class Program{
         Building b5 = new Building("Road 2");
         Building b6 = new Building("House 2");
         Building b7 = new Building("Pipe line");
-        Node n1 = new Node(new int[] {20, 60}, new int[] {40, 80}, new ArrayList<Node>(), b1);
-        Node n2 = new Node(new int[] {70, 40}, new int[] {90, 60}, new ArrayList<Node>(), b3);
-        Node n3 = new Node(new int[] {70, 70}, new int[] {80, 80}, new ArrayList<Node>(), b2);
-        Node n4 = new Node(new int[] {0, 40}, new int[] {60, 50}, new ArrayList<Node>(), b4);
-        Node n5 = new Node(new int[] {50, 0}, new int[] {60, 40}, new ArrayList<Node>(), b5);
-        Node n6 = new Node(new int[] {20, 20}, new int[] {40, 40}, new ArrayList<Node>(), b6);
-        Node n7 = new Node(new int[] {60, 40}, new int[] {100, 50}, new ArrayList<Node>(), b7);
+        Node n1 = new Node(new Point(20, 60), new Point(40, 80), new ArrayList<Node>(), b1);
+        Node n2 = new Node(new Point(70, 40), new Point(90, 60), new ArrayList<Node>(), b3);
+        Node n3 = new Node(new Point(70, 70), new Point(80, 80), new ArrayList<Node>(), b2);
+        Node n4 = new Node(new Point(0, 40), new Point(60, 50), new ArrayList<Node>(), b4);
+        Node n5 = new Node(new Point(50, 0), new Point(60, 40), new ArrayList<Node>(), b5);
+        Node n6 = new Node(new Point(20, 20), new Point(40, 40), new ArrayList<Node>(), b6);
+        Node n7 = new Node(new Point(60, 40), new Point(100, 50), new ArrayList<Node>(), b7);
 
 
 
@@ -26,72 +26,66 @@ public class Program{
 class Node{
 
     public ArrayList<Node> children;
-    public int[] lb;
-    public int[] ru;
+    public Rectangle box;
     public Object obj;
 
 
     public Node(){
         children = new ArrayList<>();
-        lb = new int[2];
-        ru = new int[2];
+        box = new Rectangle();
         obj = null;
     }
 
-    public Node(int[] lb, int[] ru){
+    public Node(Point bl, Point tr){
         children = new ArrayList<>();
-        this.lb = lb.clone();
-        this.ru = ru.clone();
+        box = new Rectangle(bl, tr);
         obj = null;
     }
 
-    public Node(int[] lb, int[] ru, ArrayList<Node> children){
+    public Node(Point bl, Point tr, ArrayList<Node> children){
         this.children.addAll(children);
-        this.lb = lb.clone();
-        this.ru = ru.clone();
+        box = new Rectangle(bl, tr);
         obj = null;
     }
 
-    public Node(int[] lb, int[] ru, ArrayList<Node> children, Object obj){
+    public Node(Point bl, Point tr, ArrayList<Node> children, Object obj){
         this.children.addAll(children);
-        this.lb = lb.clone();
-        this.ru = ru.clone();
+        box = new Rectangle(bl, tr);
         this.obj = obj;
     }
 
-    public boolean containsPoint(int x, int y){
-        return ((lb[0] <= x && ru[0] <= x) || (lb[1] <= y && ru[1] <= y));
+    public boolean containsPoint(Point p){
+        return box.containsPoint(p);
     }
 
-    public boolean boundedIn(int[] lb, int[]ru){
-        return ( containsPoint(lb[0], lb[1]) && containsPoint(ru[0], ru[1]) );
+    public boolean boundedIn(Rectangle bx){
+        return box.boundedIn(bx);
     }
 
-    public ArrayList<Object> lookup(int x, int y, Node n, ArrayList<Object> results){
+    public ArrayList<Object> lookup(Point p, Node n, ArrayList<Object> results){
         if (n==this){
             for (Node child:children){
-                if (child.containsPoint(x, y))
-                    lookup(x, y, child, results);
+                if (child.containsPoint(p))
+                    lookup(p, child, results);
             }
         } else {
-            if (containsPoint(x, y))
+            if (containsPoint(p))
                 results.add(obj);
         }
         return results;
     }
 
-    public void setMBB(int[] lb, int[] ru){
-        this.lb = lb.clone();
-        this.ru = ru.clone();
+    public void setMBB(Rectangle bx){
+        box = new Rectangle(bx.bottom_left, bx.top_right);
     }
 
     public void setObj(Object obj){this.obj = obj;}
 
-    public insert(int[] lb, int[] ru, Object obj, Node n){
+    public insert(Rectangle r, Object obj, Node n){
         if (n == this){
             for(Node child:children){
-                if child.boundedIn(lb, ru)
-                    child.insert(lb, ru, obj, child);
+                if child.boundedIn(r)
+                    child.insert(r, obj, child);
             }
         }
     }
@@ -107,5 +101,48 @@ class Building{
 
     Building(String name){
         this.name = name;
+    }
+}
+
+
+class Point{
+    public int x, y;
+
+    Point(){
+        x = 0;
+        y = 0;
+    }
+
+    Point(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Rectangle{
+    public Point bottom_left, top_right;
+
+    Rectangle(){
+        bottom_left = new Point(0, 0);
+        top_right = new Point(0, 0);
+    }
+
+    Rectangle(Point bl, Point ur){
+        this.bottom_left = bl;
+        this.top_right = ur;
+    }
+
+    public boolean containsPoint(Point p){
+        return ( (p.x <= top_right.x && bottom_left.x <= p.x) && (p.y <= top_right.y && bottom_left.y <= p.y) );
+    }
+
+    public boolean boundedIn(Rectangle r){
+        return ( containsPoint(r.bottom_left) && containsPoint(r.top_right) );
+    }
+
+    public boolean overlapsRect(Rectangle r){
+        Point tl = new Point(r.bottom_left.x, r.top_right.y);
+        Point br = new Point(r.top_right.x, r.bottom_left.y);
+        return (containsPoint(r.bottom_left) || containsPoint(r.top_right) || containsPoint(ul) || containsPoint(br));
     }
 }
