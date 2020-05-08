@@ -3,37 +3,22 @@ import java.util.ArrayList;
 public class Program{
     public static void main(String[] args){
 
-        Building b1 = new Building("School", new Rectangle(new Point(20, 60), new Point(40, 80)));
-        Building b2 = new Building("Pop", new Rectangle(new Point(70, 70), new Point(80, 80)));
-        Building b3 = new Building("House2", new Rectangle(new Point(70, 40), new Point(90, 60)));
-        Building b4 = new Building("Road 1", new Rectangle(new Point(0, 40), new Point(60, 50)));
-        Building b5 = new Building("Road 2", new Rectangle(new Point(50, 0), new Point(60, 40)));
-        Building b6 = new Building("House 2", new Rectangle(new Point(20, 20), new Point(40, 40)));
-        Building b7 = new Building("Pipe line", new Rectangle(new Point(60, 40), new Point(100, 50)));
-        Node n1 = new Node(b1.mbb.clone(), b1);
-        Node n2 = new Node(b2.mbb.clone(), b2);
-        Node n3 = new Node(b3.mbb.clone(), b3);
-        Node n4 = new Node(b4.mbb.clone(), b4);
-        Node n5 = new Node(b5.mbb.clone(), b5);
-        Node n6 = new Node(b6.mbb.clone(), b6);
-        Node n7 = new Node(b7.mbb.clone(), b7);
-        // Node n1 = new Node(b1.mbb.clone(), new ArrayList<Node>(), b1);
-        // Node n2 = new Node(b2.mbb.clone(), new ArrayList<Node>(), b2);
-        // Node n3 = new Node(b3.mbb.clone(), new ArrayList<Node>(), b3);
-        // Node n4 = new Node(b4.mbb.clone(), new ArrayList<Node>(), b4);
-        // Node n5 = new Node(b5.mbb.clone(), new ArrayList<Node>(), b5);
-        // Node n6 = new Node(b6.mbb.clone(), new ArrayList<Node>(), b6);
-        // Node n7 = new Node(b7.mbb.clone(), new ArrayList<Node>(), b7);
+        Building b1 = new Building("School");
+        Building b2 = new Building("Pop");
+        Building b3 = new Building("House2");
+        Building b4 = new Building("Road 1");
+        Building b5 = new Building("Road 2");
+        Building b6 = new Building("House 2");
+        Building b7 = new Building("Pipe line");
+        Node n1 = new Node(new Point(20, 60), new Point(40, 80), new ArrayList<Node>(), b1);
+        Node n2 = new Node(new Point(70, 40), new Point(90, 60), new ArrayList<Node>(), b3);
+        Node n3 = new Node(new Point(70, 70), new Point(80, 80), new ArrayList<Node>(), b2);
+        Node n4 = new Node(new Point(0, 40), new Point(60, 50), new ArrayList<Node>(), b4);
+        Node n5 = new Node(new Point(50, 0), new Point(60, 40), new ArrayList<Node>(), b5);
+        Node n6 = new Node(new Point(20, 20), new Point(40, 40), new ArrayList<Node>(), b6);
+        Node n7 = new Node(new Point(60, 40), new Point(100, 50), new ArrayList<Node>(), b7);
 
-        // System.out.printf("%s\n", b3);
 
-        Point p1 = new Point(95, 55);
-        Point p2 = new Point(100, 65);
-        Rectangle r = new Rectangle(p1, p2);
-        if (b3.mbb.overlapsRect(r))
-          System.out.printf("%s overlaps %s\n", b3, r);
-        else
-          System.out.printf("%s does not overlap %s\n", b3, r);
 
     }
 }
@@ -42,57 +27,33 @@ class Node{
 
     public static int MAX_NODES = 4;
 
-    public boolean isLeaf;
     public ArrayList<Node> children;
     public Rectangle box;
-    public ArrayList<Node> contents;
+    public Object obj;
 
 
     public Node(){
         children = new ArrayList<>();
-        isLeaf = false;
         box = new Rectangle();
-        contents = new ArrayList<>();
+        obj = null;
     }
 
-    public Node(Rectangle r){
+    public Node(Point bl, Point tr){
         children = new ArrayList<>();
-        isLeaf = false;
-        box = r.clone();
-        contents = new ArrayList<>();
+        box = new Rectangle(bl, tr);
+        obj = null;
     }
 
-    public Node(Rectangle r, ArrayList<Node> children){
-        this.children = new ArrayList<>();
+    public Node(Point bl, Point tr, ArrayList<Node> children){
         this.children.addAll(children);
-        box = r.clone();
-        isLeaf = false;
-        contents = new ArrayList<>();
+        box = new Rectangle(bl, tr);
+        obj = null;
     }
 
-    public Node(Rectangle r, Object obj){
-        this.children = new ArrayList<>();
-        isLeaf = true;
-        box = r.clone();
-        contents = new ArrayList<>();
-        contents.add(obj);
-    }
-
-    public Node(Rectangle r, ArrayList<Node> children){
-        this.children = new ArrayList<>();
+    public Node(Point bl, Point tr, ArrayList<Node> children, Object obj){
         this.children.addAll(children);
-        box = r.clone();
-        isLeaf = false;
-        contents = new ArrayList<>();
-    }
-
-    public Node(Rectangle r, ArrayList<Node> children, ArrayList<Node> contents){
-        this.children = new ArrayList<>();
-        this.children.addAll(children);
-        box = r.clone();
-        isLeaf = true;
-        this.contents = new ArrayList<>();
-        this.contents.addAll(contents);
+        box = new Rectangle(bl, tr);
+        this.obj = obj;
     }
 
     public boolean containsPoint(Point p){
