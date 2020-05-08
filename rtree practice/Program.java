@@ -25,6 +25,8 @@ public class Program{
 
 class Node{
 
+    public static int MAX_NODES = 4;
+
     public ArrayList<Node> children;
     public Rectangle box;
     public Object obj;
@@ -58,8 +60,8 @@ class Node{
         return box.containsPoint(p);
     }
 
-    public boolean boundedIn(Rectangle bx){
-        return box.boundedIn(bx);
+    public boolean bounds(Rectangle bx){
+        return box.bounds(bx);
     }
 
     public ArrayList<Object> lookup(Point p, Node n, ArrayList<Object> results){
@@ -75,16 +77,17 @@ class Node{
         return results;
     }
 
-    public void setMBB(Rectangle bx){
-        box = new Rectangle(bx.bottom_left, bx.top_right);
+    public void setMBB(Rectangle r){
+        box = r.clone();
     }
 
     public void setObj(Object obj){this.obj = obj;}
 
-    public insert(Rectangle r, Object obj, Node n){
+    public void insert(Rectangle r, Object obj, Node n){
         if (n == this){
             for(Node child:children){
-                if child.boundedIn(r)
+                //if (child.boundedIn(r))
+                if (child.bounds(r))
                     child.insert(r, obj, child);
             }
         }
@@ -93,14 +96,22 @@ class Node{
 }
 
 class Building{
-    String name;
+    public String name;
+    public Rectangle mbb;
 
     Building(){
         name = "";
+        mbb = new Rectangle(new Point(0,0), new Point(0,0));
     }
 
     Building(String name){
         this.name = name;
+        mbb = new Rectangle(new Point(0,0), new Point(0,0));
+    }
+
+    Building(String name, Rectangle r){
+        this.name = name;
+        mbb = r.clone();
     }
 }
 
@@ -136,13 +147,17 @@ class Rectangle{
         return ( (p.x <= top_right.x && bottom_left.x <= p.x) && (p.y <= top_right.y && bottom_left.y <= p.y) );
     }
 
-    public boolean boundedIn(Rectangle r){
+    public boolean bounds(Rectangle r){
         return ( containsPoint(r.bottom_left) && containsPoint(r.top_right) );
     }
 
     public boolean overlapsRect(Rectangle r){
         Point tl = new Point(r.bottom_left.x, r.top_right.y);
         Point br = new Point(r.top_right.x, r.bottom_left.y);
-        return (containsPoint(r.bottom_left) || containsPoint(r.top_right) || containsPoint(ul) || containsPoint(br));
+        return (containsPoint(r.bottom_left) || containsPoint(r.top_right) || containsPoint(tl) || containsPoint(br));
+    }
+
+    public Rectangle clone(){
+        return new Rectangle(this.bottom_left, this.top_right);
     }
 }
