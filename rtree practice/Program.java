@@ -27,6 +27,7 @@ class Node{
 
     public static int MAX_NODES = 4;
 
+    public boolean isLeaf;
     public ArrayList<Node> children;
     public Rectangle box;
     public Object obj;

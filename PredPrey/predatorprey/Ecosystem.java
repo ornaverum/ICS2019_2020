@@ -126,10 +126,13 @@ public class Ecosystem{
 			if (a instanceof Prey){
 				pos = a.getPos();
 				xn = a.x; yn = a.y;
+				
 				// pos[0] = xn; pos[1] = yn;
 				// check to see if it's a neighbor of Predator at (x,y)
-				// if it is...
-				targets.add(a);
+				
+				if ( xn == x + 1 || xn == x || xn == x-1 || (xn == 0 && x == size-1) || (x == 0 && xn == size-1) ) &&
+					( yn == y + 1 || yn == y || yn == y-1 || (yn == 0 && y == size-1) || (y == 0 && yn == size-1) )
+						targets.add(a);	// if it is...
 			}
 		}
 		
